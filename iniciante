@@ -1,1 +1,77 @@
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Sala {
+    char nome[50];
+    struct Sala *esquerda;
+    struct Sala *direita;
+} Sala;
+
+Sala* criarSala(const char *nome) {
+    Sala *nova = (Sala*) malloc(sizeof(Sala));
+
+    if (nova == NULL) {
+        return NULL;
+    }
+
+    strcpy(nova->nome, nome);
+    nova->esquerda = NULL;
+    nova->direita = NULL;
+
+    return nova;
+}
+
+    void explorarSalas(Sala *atual);
+
+    int main() {
+        Sala *hall = criarSala("Hall");
+        Sala *salaEstar = criarSala("Sala de Estar");
+        Sala *cozinha = criarSala("Cozinha");
+        Sala *quarto = criarSala("Quarto");
+        Sala *jardim = criarSala("Jardim");
+
+        hall->esquerda = salaEstar;
+        hall->direita = cozinha;
+
+        salaEstar->esquerda = quarto;
+        cozinha->direita = jardim;
+
+        explorarSalas(hall);
+    
+        return 0;
+    }
+
+    void explorarSalas(Sala *atual) {
+        char escolha;
+
+        while (atual != NULL) {
+            printf("\nVocê está em: %s\n", atual->nome);
+
+            if (atual->esquerda == NULL && atual->direita == NULL) {
+                printf("Não há mais caminhos. Fim da exploraçao.");
+                break;
+            }
+
+            printf("Escolha um caminho:\n");
+
+            if (atual->esquerda != NULL) printf(" (e) Esquerda\n");
+            if (atual->direita != NULL) printf(" (d) Direita\n");
+
+            printf(" (s) Sair\n");
+            scanf(" %c", &escolha);
+
+            if (escolha == 'e' && atual->esquerda != NULL) {
+                atual = atual->esquerda;
+            } else if (escolha == 'd' && atual->direita != NULL) {
+                atual = atual->direita;
+            } else if (escolha == 's') {
+                printf("Exploração encerrada.\n");
+                break;
+            } else {
+                printf("Opção invalida.\n");
+            }
+            
+        }
+    }
